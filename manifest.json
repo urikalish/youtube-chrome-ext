@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "YouTube Ext",
+  "description": "YouTube Ext",
+  "version": "1.0.0",
+  "browser_action": {
+    "default_icon": "youtube-ext.png",
+    "default_title": "YouYube Ext"
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+		"matches": [
+			"https://www.youtube.com/watch?v=*"
+		],
+		"css" :[
+			"youtube-ext.css"
+		],
+		"js" :[
+			"youtube-ext.js"
+		]
+    }    
+  ]
+}
