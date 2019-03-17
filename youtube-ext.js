@@ -3,58 +3,60 @@ console.log('YouTubeChromeExt');
 
 var videosData = {};
 
-setTimeout(() => {
+// setTimeout(() => {
+// 	getAllVideosData();
+// 	observeDOM(document.querySelector('div#items.ytd-watch-next-secondary-results-renderer'), () => {
+// 		debounce(
+// 			() => {
+// 				getAllVideosData();
+// 			},
+// 			100
+// 		)();
+// 	});
+// }, 5000);
+
+// function observeDOM(obj, cb){
+// 	let obs = new MutationObserver((mutations) => {
+// 	if (mutations[0].addedNodes.length || mutations[0].removedNodes.length )
+// 		cb();
+// 	});
+// 	obs.observe(
+// 		obj,
+// 		{
+// 			childList: true,
+// 			subtree:true
+// 		}
+// 	);
+// }
+
+// function debounce(func, wait, immediate) {
+// 	var timeout;
+// 	return function() {
+// 		var context = this, args = arguments;
+// 		var later = function() {
+// 			timeout = null;
+// 			if (!immediate) func.apply(context, args);
+// 		};
+// 		var callNow = immediate && !timeout;
+// 		clearTimeout(timeout);
+// 		timeout = setTimeout(later, wait);
+// 		if (callNow) func.apply(context, args);
+// 	};
+// };
+
+setInterval( () => {
 	getAllVideosData();
-	observeDOM(document.querySelector('div#items.ytd-watch-next-secondary-results-renderer'), () => {
-		debounce(
-			() => {
-				getAllVideosData();
-			},
-			100
-		)();
-	});
-}, 5000);
-
-function observeDOM(obj, cb){
-	let obs = new MutationObserver((mutations) => {
-	if (mutations[0].addedNodes.length || mutations[0].removedNodes.length )
-		cb();
-	});
-	obs.observe(
-		obj,
-		{
-			childList: true,
-			subtree:true
-		}
-	);
-}
-
-function debounce(func, wait, immediate) {
-	var timeout;
-	return function() {
-		var context = this, args = arguments;
-		var later = function() {
-			timeout = null;
-			if (!immediate) func.apply(context, args);
-		};
-		var callNow = immediate && !timeout;
-		clearTimeout(timeout);
-		timeout = setTimeout(later, wait);
-		if (callNow) func.apply(context, args);
-	};
-};
+	}, 10000);
 
 function getAllVideosData() {
 	let parentDomElms = document.querySelectorAll('div#items.ytd-watch-next-secondary-results-renderer ytd-compact-video-renderer');
 	for (let i = 0; i < parentDomElms.length; i++) {
 		let parentDomElm = parentDomElms[i];
 		let id = parentDomElm.querySelector('a#thumbnail').getAttribute('href').substring(9);
-
 		let dataElm = parentDomElm.querySelector(`[id^="youtube-chrome-ext--data--"]`);
 		if (dataElm && dataElm.getAttribute('id') !== `youtube-chrome-ext--data--${id}`) {
 			dataElm.parentElement.removeChild(dataElm);
 		}
-
 		if (!videosData[id]) {
 			videosData[id] = {
 				id: id,
@@ -77,7 +79,7 @@ function getVideoData(id) {
 		xhr.onerror = () => {
 			console.log(`error on getVideoData() - ${err}`);
 		};
-		let url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyDC3ZkKLUZ4rhoJbyTGxiD3YKmokimspXU&id=${id}`;
+		let url = `https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyASbXaM6AU8D6GCB8-1fV798tqg1XZCv6U&id=${id}`;
 		xhr.open('GET', url, true);
 		xhr.send('');	
 	} catch(err) {
