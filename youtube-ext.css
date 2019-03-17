@@ -17,7 +17,7 @@
 
 .youtube-chrome-ext--like-dislike {
 	display: flex;
-	width: 100px;
+	width: 120px;
 	height: 9px;	
 }
 
@@ -33,10 +33,11 @@
 .youtube-chrome-ext--comment-count {
 	position: absolute;
 	top: 0px;
-	left: 103px;
+	left: 123px;
 	overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 	font-size: 9px;
+	line-height: 9px;
 	color: #666;	
 }
