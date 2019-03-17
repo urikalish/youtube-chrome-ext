@@ -3,6 +3,18 @@ console.log('YouTubeChromeExt');
 
 var videosData = {};
 
+setTimeout(() => {
+	getAllVideosData();
+	observeDOM(document.querySelector('div#items.ytd-watch-next-secondary-results-renderer'), () => {
+		debounce(
+			() => {
+				getAllVideosData();
+			},
+			100
+		)();
+	});
+}, 5000);
+
 function observeDOM(obj, cb){
 	let obs = new MutationObserver((mutations) => {
 	if (mutations[0].addedNodes.length || mutations[0].removedNodes.length )
@@ -17,23 +29,38 @@ function observeDOM(obj, cb){
 	);
 }
 
-setTimeout(function() {
-	getAllVideosData();
-	observeDOM(document.querySelector('div#items.ytd-watch-next-secondary-results-renderer'), () => {
-		getAllVideosData();
-	});
-}, 5000);
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
 
 function getAllVideosData() {
-	let elms = document.querySelectorAll('div#items.ytd-watch-next-secondary-results-renderer ytd-compact-video-renderer');
-	for (let i = 0; i < elms.length; i++) {
-		let videoId = elms[i].querySelector('a#thumbnail').getAttribute('href').substring(9);
-		if (!videosData[videoId]) {
-			videosData[videoId] = {
-				id: videoId,
-				parentDomElm: elms[i]
+	let parentDomElms = document.querySelectorAll('div#items.ytd-watch-next-secondary-results-renderer ytd-compact-video-renderer');
+	for (let i = 0; i < parentDomElms.length; i++) {
+		let parentDomElm = parentDomElms[i];
+		let id = parentDomElm.querySelector('a#thumbnail').getAttribute('href').substring(9);
+
+		let dataElm = parentDomElm.querySelector(`[id^="youtube-chrome-ext--data--"]`);
+		if (dataElm && dataElm.getAttribute('id') !== `youtube-chrome-ext--data--${id}`) {
+			dataElm.parentElement.removeChild(dataElm);
+		}
+
+		if (!videosData[id]) {
+			videosData[id] = {
+				id: id,
+				parentDomElm: parentDomElm
 			};
-			getVideoData(videoId);
+			getVideoData(id);
 		}
 	}		
 }
@@ -76,6 +103,7 @@ function handleVideoData(data) {
 
 function updateDom(videoData) {
 	let dataElm = document.createElement('div');
+	dataElm.setAttribute('id', `youtube-chrome-ext--data--${videoData.id}`);
 	dataElm.classList.add('youtube-chrome-ext--data');
 
 	let likeDislikeElm = document.createElement('div');
