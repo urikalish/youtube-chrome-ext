@@ -1,0 +1,42 @@
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+		width: 0%;
+	}
+	100% {
+		opacity: 1;
+		width: 100%;
+	}
+}
+
+.youtube-chrome-ext--data {
+	position: relative;
+	overflow: hidden;
+	animation: fade-in 0.5s linear;
+}
+
+.youtube-chrome-ext--like-dislike {
+	display: flex;
+	width: 100px;
+	height: 9px;	
+}
+
+.youtube-chrome-ext--like {
+	background-color: #6c6;
+}
+
+.youtube-chrome-ext--dislike {
+	margin-left: 1px;
+	background-color: #f33;
+}
+
+.youtube-chrome-ext--comment-count {
+	position: absolute;
+	top: 0px;
+	left: 103px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+	font-size: 9px;
+	color: #666;	
+}
