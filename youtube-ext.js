@@ -72,8 +72,10 @@ function getVideoData(id) {
 		let xhr = new XMLHttpRequest();	
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === 4) {
-				let data = JSON.parse(xhr.response);
-				handleVideoData(data);			
+					if (xhr.response) {
+					let data = JSON.parse(xhr.response);
+					handleVideoData(data);
+				}
 			}
 		};
 		xhr.onerror = () => {
